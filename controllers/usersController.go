@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"mvc/initializers"
 	"mvc/models"
 	"strconv"
@@ -59,16 +58,9 @@ func FindUser(c *gin.Context) {
 // NewUser this function create a new user
 func NewUser(c *gin.Context) {
 	var users models.ResponseUser
-	if err := c.ShouldBindJSON(&users); err != nil {
-		c.IndentedJSON(400, gin.H{
-			"message": "Error",
-			"error":   err.Error(),
-		})
-		return
-	}
 	query := `INSERT INTO users(name, age) VALUES (?,?)`
-	insertDb, err := initializers.DB.Exec(query)
-	if err != nil {
+
+	if err := c.BindJSON(&users); err != nil {
 		c.IndentedJSON(400, gin.H{
 			"message": "Error",
 			"error":   err.Error(),
@@ -76,7 +68,9 @@ func NewUser(c *gin.Context) {
 		return
 	}
 
-	lastId, err := insertDb.LastInsertId()
+	//fmt.Printf("[DEBUG] %v\n", users)
+
+	_, err := initializers.DB.Exec(query, users.Name, users.Age)
 	if err != nil {
 		c.IndentedJSON(400, gin.H{
 			"message": "Error",
@@ -86,6 +80,6 @@ func NewUser(c *gin.Context) {
 	}
 
 	c.IndentedJSON(200, gin.H{
-		"message": fmt.Sprintf("User added, id: %d", lastId),
+		"message": "User added",
 	})
 }
