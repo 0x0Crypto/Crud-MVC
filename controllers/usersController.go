@@ -92,7 +92,7 @@ func DeleteUser(c *gin.Context) {
 	query := `DELETE FROM users WHERE id = ?`
 	_, err := initializers.DB.Exec(query, intUserId)
 	if err != nil {
-		c.IndentedJSON(400, gin.H{
+		c.IndentedJSON(404, gin.H{
 			"message": "Error",
 			"error":   err.Error(),
 		})
@@ -110,7 +110,7 @@ func UpdateUser(c *gin.Context) {
 	query := `UPDATE users SET name = ?,age = ? WHERE id = ?`
 
 	if err := c.BindJSON(&users); err != nil {
-		c.IndentedJSON(400, gin.H{
+		c.IndentedJSON(404, gin.H{
 			"message": "Error",
 			"error":   err.Error(),
 		})
