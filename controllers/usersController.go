@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"mvc/initializers"
 	"mvc/models"
 	"strconv"
@@ -13,7 +12,10 @@ import (
 func ListUsers(c *gin.Context) {
 	rows, err := initializers.DB.Query("SELECT * FROM users")
 	if err != nil {
-		fmt.Println(err.Error())
+		c.IndentedJSON(200, gin.H{
+			"message": "Error",
+			"error":   err.Error(),
+		})
 		return
 	}
 	defer rows.Close()
@@ -23,7 +25,10 @@ func ListUsers(c *gin.Context) {
 		user := new(models.User)
 		err := rows.Scan(&user.ID, &user.Name, &user.Age)
 		if err != nil {
-			fmt.Println(err.Error())
+			c.IndentedJSON(200, gin.H{
+				"message": "Error",
+				"error":   err.Error(),
+			})
 			return
 		}
 		users = append(users, user)
