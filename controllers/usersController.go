@@ -103,3 +103,30 @@ func DeleteUser(c *gin.Context) {
 		"message": "User deleted",
 	})
 }
+
+// UpdateUser this function update a user data
+func UpdateUser(c *gin.Context) {
+	var users models.RequestUser
+	query := `UPDATE users SET name = ?,age = ? WHERE id = ?`
+
+	if err := c.BindJSON(&users); err != nil {
+		c.IndentedJSON(400, gin.H{
+			"message": "Error",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	_, err := initializers.DB.Exec(query, users.Name, users.Age, users.ID)
+	if err != nil {
+		c.IndentedJSON(400, gin.H{
+			"message": "Error",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.IndentedJSON(200, gin.H{
+		"message": "User updated!",
+	})
+}
