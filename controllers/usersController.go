@@ -40,11 +40,12 @@ func FindUser(c *gin.Context) {
 
 	err := initializers.DB.QueryRow("SELECT * FROM users WHERE id = ?", intUserId).Scan(&user.ID, &user.Name, &user.Age)
 	if err != nil {
-		fmt.Println(err.Error())
+		c.IndentedJSON(200, gin.H{
+			"message": "Error",
+			"error":   err.Error(),
+		})
 		return
 	}
 
-	if len(user.ID) != 0 {
-		c.IndentedJSON(200, user)
-	}
+	c.IndentedJSON(200, user)
 }
