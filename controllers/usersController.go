@@ -83,3 +83,23 @@ func NewUser(c *gin.Context) {
 		"message": "User added",
 	})
 }
+
+// DeleteUser this function delete a user from ID
+func DeleteUser(c *gin.Context) {
+	userId := c.Param("id")
+	intUserId, _ := strconv.ParseInt(userId, 10, 64)
+
+	query := `DELETE FROM users WHERE id = ?`
+	_, err := initializers.DB.Exec(query, intUserId)
+	if err != nil {
+		c.IndentedJSON(400, gin.H{
+			"message": "Error",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	c.IndentedJSON(200, gin.H{
+		"message": "User deleted",
+	})
+}
