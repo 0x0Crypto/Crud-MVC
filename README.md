@@ -49,7 +49,7 @@ http://localhost:8080/users
 
 - **Request Body:**
 
-- ```json
+  ```json
   {
       "id": 1
       "name": "New Name",
@@ -77,7 +77,7 @@ http://localhost:8080/users
 
 - **Example Request:**
 
-- ```http
+  ```http
   DELETE /users/12345 HTTP/1.1
   Host: 127.0.0.1:8080
   ```
